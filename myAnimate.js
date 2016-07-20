@@ -30,7 +30,7 @@ function myAnimate(elem, prop, stepVal, finalVal, duration){
                 setTimeout(arguments.callee, stepDuration); 
             }; 
         }, stepDuration);
-    }
+    }; 
     return elem; 
 }
 
