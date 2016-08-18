@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Magnifier Demo</title>
+	<style>
+		div.container{
+			width:400px;
+			margin: 100px auto;
+		}
+		div.container > img{
+			width: 100%; 
+		}
+		div.magnifier{
+			width: 400px; 
+			height: 400px; 
+			position: relative;
+			overflow: hidden;
+			margin: 50px auto;
+			display: none;
+		}
+		div.magnifier > img{
+			position: absolute;
+/* 			transition: all 0.3s linear;
+ */		}
+		div.container:hover + div{
+			display: block;
+		}
+	</style>
+</head>
+<body>
+	<div class='container'><img src="cooper.jpg" alt=""></div>
+	<div class="magnifier"><img src="cooper.jpg" alt=""></div>
+	<span class='dataX'></span><span>, </span><span class='dataY'></span>
+	<script>
+		window.onload = function(){
+			var selector = document.querySelector.bind(document); 
+			var data = {
+				dataX: '', 
+				dataY: ''
+			}; 
+			var img = selector('div.magnifier > img'); 
+			var thumbnail = selector('div.container'); 
+			var magnifier = selector('div.magnifier'); 
+
+			var mousemoveTimer = null; 
+			var thumbnailX = thumbnail.clientWidth; 
+			var converter = img.naturalWidth/thumbnailX; 
+
+			selector('div.container > img').addEventListener('mousemove', function(e) {
+				mousemoveTimer&&clearTimeout(mousemoveTimer); 
+				mousemoveTimer = setTimeout(function(){
+					data.dataX = e.offsetX; 
+					data.dataY = e.offsetY; 
+					img.style.left = '-' + e.offsetX*converter + 'px'; 
+					img.style.top = '-' + e.offsetY*converter + 'px'; 
+				}, 5)
+			}); 
+
+			Object.defineProperty(data, 'dataX', {
+				set: function(val){
+					selector('span.dataX').innerHTML = val; 
+				}
+			})
+			Object.defineProperty(data, 'dataY', {
+				set: function(val){
+					selector('span.dataY').innerHTML = val; 
+				}
+			})
+			// debugger; 
+		}
+	</script>
+</body>
+</html>
