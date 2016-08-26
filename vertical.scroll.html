@@ -1,0 +1,42 @@
+ <html>
+ <head>
+ <style>
+div.outer{
+	margin:100px auto;
+	height: 20px;
+	width: 200px;
+	outline: 1px solid black;
+	overflow: hidden;
+}
+p{
+	margin: 0;
+	padding: 0;
+	line-height: 20px;
+}
+ </style>
+ <!-- <script src="js/layer-v2.2/layer/Layer.js"></script> -->
+ </head>
+ <body>
+<div class="outer" id="investShow">
+	<p class="inner">111</p>
+	<p class="inner">112</p>
+	<p class="inner">113</p>
+	<p class="inner">114</p>
+	<p class="inner">115</p>
+
+	<p class="inner">116</p>
+
+	<p class="inner">117</p>
+
+</div>
+
+<script>
+var box=document.getElementById("investShow"),height = box.clientHeight;
+new function (){
+ // debugger; 
+ box.scrollTop==parseInt(box.scrollHeight)-height?box.scrollTop=0:box.scrollTop++;//如果box已经滚动到顶部，则归位(scrollTop=0);否则scrollTop递增
+ setTimeout(arguments.callee,box.scrollTop%height?50:500);//调用自身，如果scrollTop为20整倍数（对应内容正好显示在中间），则停顿150ms；否则每隔10ms调用一次（scrollTop递增）
+};
+</script>
+ </body>
+ </html>

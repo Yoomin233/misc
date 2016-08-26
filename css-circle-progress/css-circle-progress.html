@@ -8,8 +8,8 @@
 			font-size: 50px;
 		}
 		div.container{
-			width: 10rem; 
-			height: 10rem;
+			width: 3rem; 
+			height: 3rem;
 			margin: 100px auto; 
 		}
 	</style>
@@ -23,19 +23,23 @@
 			function circleRotate(elem, val, duration){
 				if(!(elem&&val&&duration))return false;
 				elem.style.position = 'relative'; 
+
 				// === about the styles and elements ===
 				// data settings
 				var containerHeight = elem.clientHeight; 
-				var borderWidth = (containerHeight/14).toFixed(0); 
+				elem.style.borderRadius = '0 ' + containerHeight/2 + 'px ' + containerHeight/2 + 'px 0'; 
+				var borderWidth = (containerHeight/18).toFixed(0); 
 				// circle shade creation
 				var circleShade = document.createElement('div'); 
 				circleShade.setAttribute('style', 'position:absolute;width:50%;height:100%;background-color:transparent;left:50%;overflow:hidden;'); 
 				//circleCreation
 				var left = document.createElement('div'); 
 				var right = document.createElement('div'); 
-				var styleStr = 'position: absolute; width: 100%; height: 100%; background: transparent; box-sizing: border-box; border-style: solid; border-color: #e42727; border-width: ' + borderWidth + 'px ' + borderWidth + 'px ' + borderWidth + 'px 0; border-radius:0 ' + containerHeight/2 + 'px ' + containerHeight/2 + 'px 0; transform-origin: 0 50%; transform: rotate(-180deg); transition: all ' + duration/1000 + 's linear;'; 
+				var styleStr = 'position: absolute; width: 100%; height: 100%; background: transparent; box-sizing: border-box; border-style: solid; border-color: #e42727; border-width: ' + borderWidth + 'px ' + borderWidth + 'px ' + borderWidth + 'px 0; border-radius:0 ' + containerHeight/2 + 'px ' + containerHeight/2 + 'px 0; transform-origin: 0 ' + containerHeight/2 + 'px; transform: rotate(-180deg); transition: transform ' + duration/1000 + 's linear;'; 
 				left.setAttribute('style', styleStr); 
 				right.setAttribute('style', styleStr);
+				right.style.opacity = 0; 
+				right.style.transform = 'rotate(0deg)'; 
 				// span creation
 				var span = document.createElement('span'); 
 				span.setAttribute('style', 'position:absolute; left:0; right:0; top:0; bottom:0; margin:auto; width: 80%; height: 50%; line-height:1; text-align:center; font-size: ' + containerHeight/4 + 'px; color:#e42727; '); 
@@ -45,7 +49,7 @@
 				elem.appendChild(circleShade); 
 				elem.appendChild(span); 
 				// == styles and elements definition end here ===
-
+				// return; 
 				var propotion = val * 360; 
 				//transition-duration in ms
 				var transitionDuration = parseFloat(getComputedStyle(left).transitionDuration)*1000; 
@@ -61,7 +65,7 @@
 					setTimeout(function inner(){
 						if(initial < val * 100){
 							initial += increment; 
-							span.innerHTML = initial.toFixed(1) + '%' + '<br/><span style="font-size:' + containerHeight/5 + 'px;">准确率</span>'
+							span.innerHTML = initial.toFixed(1) + '%' + '<br/><span style="font-size:' + containerHeight/5 + 'px;color:#aaa; ">准确率</span>'
 							setTimeout(inner, 20); 
 						}
 					}, 20); 
@@ -72,24 +76,20 @@
 				}
 				if(val <= 0.5){
 					lessThan(propotion, left); 
-					textIncre(span, val, transitionDuration); 
 				}else{
 					// 确定转半周需要多久(ms)
-					var half = parseInt(((0.5/val) * transitionDuration)); 
-					// 先左右同时转
-					right.style.transitionDuration = left.style.transitionDuration = half/1000 + 's'; 
-					lessThan(180, left);
-					lessThan(180, right);  
-					//一起转完了右边单独转
+					var half = parseInt(((0.5/val) * duration)); 
+					// 左边转过来, 同事右边还是透明状态
+					lessThan(propotion, left);
+					// 左边转好了以后继续转, 同时右边现身
 					setTimeout(function(){
-						right.style.transitionDuration = (transitionDuration - half)/1000 + 's'; 
-						right.style.transform = 'rotate(' + (-180+propotion) + 'deg)'; 
-						left.parentNode.style.overflow = 'visible'; 
-					}, half + 50 ); 
-					textIncre(span, val, transitionDuration); 
+						right.style.opacity = 1; 
+						circleShade.style.overflow = 'visible'; 
+					}, half + 10); 
 				}
+				textIncre(span, val, duration); 
 			}
-			circleRotate(document.querySelector('.container'), 0.85, 1000); 
+			circleRotate(document.querySelector('.container'), 0.75, 1000); 
 		}
 	</script>
 </body>

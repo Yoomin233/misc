@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		div.container{
+			width: 200px; 
+			height: 200px; 
+			margin: 100px auto;
+			position: relative;
+		}
+		div.shade{
+/* 			overflow: hidden;		
+ */		}
+		div.roter{
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+
+	</div>
+	<script>
+		window.onload = function(){
+			function circleRotate(elem, val, duration){
+				var circle = document.createElement('div'); 
+				circle.setAttribute('style', 'width:100%;height:100%;border-width:10px;border-style:solid;border-color:#000;border-radius:50%;position:absolute;box-sizing:border-box;z-index:1;'); 
+				var shade = document.createElement('div'); 
+				shade.setAttribute('style', 'position:absolute;width:50%;height:100%;z-index:2;background-color:#fff;'); 
+				var roter = document.createElement('div'); 
+				roter.setAttribute('style', 'position:absolute;width:100%;height:100%;left:100%;background-color:#fff;transform-origin:0 50%;transform:rotate(0deg);transition: transform ' + duration/1000 + 's linear'); 
+				var text = document.createElement('span'); 
+				text.setAttribute('style', 'z-index:3;position:absolute;left:0;right:0;top:0;bottom:0;margin:auto;width:80%;height:30%;font-size:200%;line-height:1;text-align: center; '); 
+				shade.appendChild(roter); 
+				elem.appendChild(circle); 
+				elem.appendChild(shade); 
+				elem.appendChild(text); 
+				var deg = 360 * val; 
+				function textIncre(elem, val, duration){
+					var frames = parseInt(duration/20); 
+					var increment = (val*100)/frames; 
+					var initial = 0; 
+					elem.innerHTML = initial + '%'; 
+					setTimeout(function inner(){
+						if(initial < val * 100){
+							initial += increment; 
+							elem.innerHTML = initial.toFixed(1) + '%' + '<br/><span style="font-size:12px;color:#aaa; ">准确率</span>'
+							setTimeout(inner, 20); 
+						}
+					}, 20); 
+				}; 
+				setTimeout(function(){
+					if(deg<=180){
+						roter.style.transform = 'rotate(' + deg + 'deg)'; 
+					}else{
+						var half = (0.5/val)*duration; 
+						roter.style.transform = 'rotate(' + deg + 'deg)'; 
+						setTimeout(function(){
+							shade.style.backgroundColor = 'transparent'; 
+							shade.style.overflow = 'hidden'; 
+						}, half + 10); 
+					}; 
+					textIncre(text, val, duration); 
+				}, 0); 
+			}; 
+			circleRotate(document.querySelector('.container'), 0.75, 1000); 
+		}
+	</script>
+</body>
+</html>
